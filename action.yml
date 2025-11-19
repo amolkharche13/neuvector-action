@@ -33,11 +33,6 @@ inputs:
     required: false
     default: "true"
 
-  ExtraHelmValues:
-    description: "Extra Helm values (e.g., \"--set controller.replicas=2\")."
-    required: false
-    default: ""
-
 runs:
   using: "composite"
   steps:
@@ -98,13 +93,12 @@ runs:
           SET_TAG="--set tag=${VERSION}"
         fi
 
-        echo "Running: helm upgrade --install neuvector ${CHART} --namespace ${NS} --create-namespace ${SET_TAG} ${EXTRA}"
+        echo "Running: helm upgrade --install neuvector ${CHART} --namespace ${NS} --create-namespace ${SET_TAG}"
 
         helm upgrade --install neuvector ${CHART} \
           --namespace "${NS}" \
           --create-namespace \
-          ${SET_TAG} \
-          ${EXTRA}
+          ${SET_TAG} 
 
 branding:
   icon: "shield"
