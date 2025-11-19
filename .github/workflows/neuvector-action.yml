@@ -16,3 +16,5 @@ jobs:
 
       - name: Install NeuVector
         uses: ./
+        with:
+          Version: 5.4.2
