@@ -4,7 +4,7 @@ This GitHub Action installs or upgrades **NeuVector** in a Kubernetes cluster.
 
 ---
 
-## 🚀 What This Action Does
+## What This Action Does
 
 - Adds the NeuVector Helm repo
 - Ensures the namespace exists
@@ -13,7 +13,7 @@ This GitHub Action installs or upgrades **NeuVector** in a Kubernetes cluster.
 
 ---
 
-## ⚙️ Inputs
+## Inputs
 
 | Name | Required | Default | Description |
 |------|----------|----------|-------------|
@@ -25,7 +25,7 @@ This GitHub Action installs or upgrades **NeuVector** in a Kubernetes cluster.
 
 ---
 
-## 🧪 Example Usage
+## Example Usage
 
 Create `.github/workflows/neuvector-install.yml`:
 
