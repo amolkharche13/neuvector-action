@@ -5,6 +5,9 @@ jobs:
   install-neuvector:
     runs-on: self-hosted
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Install NeuVector
         uses: ./
         with:
