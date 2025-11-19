@@ -84,21 +84,14 @@ runs:
       run: |
         set -euo pipefail
         NS="${{ inputs.Namespace }}"
-        CHART="${{ inputs.ChartName }}"
         VERSION="${{ inputs.Version }}"
-        EXTRA="${{ inputs.ExtraHelmValues }}"
 
         SET_TAG=""
         if [[ -n "${VERSION}" ]]; then
           SET_TAG="--set tag=${VERSION}"
         fi
-
-        echo "Running: helm upgrade --install neuvector ${CHART} --namespace ${NS} --create-namespace ${SET_TAG}"
-
-        helm upgrade --install neuvector ${CHART} \
-          --namespace "${NS}" \
-          --create-namespace \
-          ${SET_TAG} 
+    
+        helm install neuvector ${CHART} --namespace "${NS}" --create-namespace "${SET_TAG}"
 
 branding:
   icon: "shield"
