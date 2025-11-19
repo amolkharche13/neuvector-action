@@ -1,0 +1,111 @@
+name: "NeuVector Action"
+description: "Installs NeuVector"
+author: ""
+
+inputs:
+  Namespace:
+    description: "Kubernetes namespace to install NeuVector."
+    required: false
+    default: "neuvector"
+
+  HelmRepo:
+    description: "NeuVector Helm repo URL."
+    required: false
+    default: "https://neuvector.github.io/neuvector-helm/"
+
+  RepoName:
+    description: "Name to assign to the Helm repo."
+    required: false
+    default: "neuvector"
+
+  ChartName:
+    description: "Helm chart name for NeuVector."
+    required: false
+    default: "neuvector/core"
+
+  Version:
+    description: "NeuVector product version (sets --set tag=<version>). Example: 5.4.2"
+    required: false
+    default: ""
+
+  LabelNamespacePrivileged:
+    description: "Label namespace with pod-security=privileged for PSA-enabled clusters."
+    required: false
+    default: "true"
+
+  ExtraHelmValues:
+    description: "Extra Helm values (e.g., \"--set controller.replicas=2\")."
+    required: false
+    default: ""
+
+runs:
+  using: "composite"
+  steps:
+    - name: Repo checkout
+      uses: actions/checkout@v4
+
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
+      with:
+        version: "latest"
+
+    - name: Setup Helm
+      uses: azure/setup-helm@v3
+      with:
+        version: "latest"
+
+    - name: Ensure namespace exists
+      shell: bash
+      run: |
+        set -euo pipefail
+        NS="${{ inputs.Namespace }}"
+        if ! kubectl get ns "${NS}" >/dev/null 2>&1; then
+          kubectl create ns "${NS}"
+          echo "Namespace ${NS} created"
+        else
+          echo "Namespace ${NS} already exists"
+        fi
+
+    - name: Label namespace privileged (PSA)
+      if: ${{ inputs.LabelNamespacePrivileged == 'true' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        NS="${{ inputs.Namespace }}"
+        kubectl label namespace "${NS}" \
+          "pod-security.kubernetes.io/enforce=privileged" --overwrite
+        echo "Namespace ${NS} labeled privileged"
+
+    - name: Add Helm repo
+      if: ${{ inputs.HelmRepo != '' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        helm repo add ${{ inputs.RepoName }} "${{ inputs.HelmRepo }}" || true
+        helm repo update
+
+    - name: Install/Upgrade NeuVector
+      shell: bash
+      run: |
+        set -euo pipefail
+        NS="${{ inputs.Namespace }}"
+        CHART="${{ inputs.ChartName }}"
+        VERSION="${{ inputs.Version }}"
+        EXTRA="${{ inputs.ExtraHelmValues }}"
+
+        SET_TAG=""
+        if [[ -n "${VERSION}" ]]; then
+          SET_TAG="--set tag=${VERSION}"
+        fi
+
+        echo "Running: helm upgrade --install neuvector ${CHART} --namespace ${NS} --create-namespace ${SET_TAG} ${EXTRA}"
+
+        helm upgrade --install neuvector ${CHART} \
+          --namespace "${NS}" \
+          --create-namespace \
+          ${SET_TAG} \
+          ${EXTRA}
+
+branding:
+  icon: "shield"
+  color: "green"
