@@ -1,5 +1,5 @@
-name: "NeuVector"
-description: "Install NeuVector"
+name: "NeuVector Cluster"
+description: "Install NeuVector on kuberentes cluster"
 author: ""
 
 inputs:
