@@ -1,0 +1,11 @@
+name: Installing Neuvector
+on:
+  push
+jobs:
+  install-neuvector:
+    runs-on: self-hosted
+    steps:
+      - name: Install NeuVector
+        uses: ./
+        with:
+          Version: "5.4.2"
