@@ -114,7 +114,7 @@ runs:
     - name: Installing NeuVector
       shell: bash
       run: |
-        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace ${SET_TAG} 
+        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }}  --version "$CHART_VERSION" --create-namespace ${SET_TAG} 
         
 branding:
   icon: "shield"
