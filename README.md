@@ -9,7 +9,7 @@ This GitHub Action installs or upgrades **NeuVector** in a Kubernetes cluster.
 - Adds the NeuVector Helm repo
 - Ensures the namespace exists
 - Installs or upgrades NeuVector using Helm
-- Allows specifying NeuVector **product version** (`tag`)
+- Allows specifying NeuVector product version (`tag`)
 
 ---
 
