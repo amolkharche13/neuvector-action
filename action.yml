@@ -1,5 +1,5 @@
 name: "NeuVector Action"
-description: "Installs NeuVector"
+description: "Install NeuVector"
 author: ""
 
 inputs:
@@ -79,19 +79,18 @@ runs:
         helm repo add ${{ inputs.RepoName }} "${{ inputs.HelmRepo }}" || true
         helm repo update
 
-    - name: Install or Upgrade NeuVector
+    - name: Installing NeuVector
       shell: bash
       run: |
         set -euo pipefail
-        NS="${{ inputs.Namespace }}"
         VERSION="${{ inputs.Version }}"
 
         SET_TAG=""
         if [[ -n "${VERSION}" ]]; then
           SET_TAG="--set tag=${VERSION}"
         fi
-    
-        helm install neuvector  neuvector/core --namespace "${NS}" --create-namespace --set "${SET_TAG}"
+        
+        helm install neuvector  neuvector/core --namespace "${{ inputs.Namespace }}" --create-namespace --set ${SET_TAG}
 
 branding:
   icon: "shield"
