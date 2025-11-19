@@ -91,7 +91,7 @@ runs:
           SET_TAG="--set tag=${VERSION}"
         fi
     
-        helm install neuvector ${CHART} --namespace "${NS}" --create-namespace "${SET_TAG}"
+        helm install neuvector  neuvector/core --namespace "${NS}" --create-namespace "${SET_TAG}"
 
 branding:
   icon: "shield"
