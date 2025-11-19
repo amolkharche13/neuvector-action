@@ -84,7 +84,7 @@ runs:
         helm repo add ${{ inputs.RepoName }} "${{ inputs.HelmRepo }}" || true
         helm repo update
 
-    - name: Install/Upgrade NeuVector
+    - name: Install or Upgrade NeuVector
       shell: bash
       run: |
         set -euo pipefail
