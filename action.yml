@@ -99,8 +99,7 @@ runs:
 
         if [[ -z "$VERSION" ]]; then
           echo "No version specified → Installing latest chart"
-          helm install neuvector neuvector/core \
-            --namespace neuvector --create-namespace
+          helm install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace 
           exit 0
         fi
 
@@ -114,7 +113,7 @@ runs:
     - name: Installing NeuVector
       shell: bash
       run: |
-        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }}  --version "$CHART_VERSION" --create-namespace ${SET_TAG} 
+        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace --version "${CHART_VERSION}"  --set tag="${VERSION}"
         
 branding:
   icon: "shield"
