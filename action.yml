@@ -79,17 +79,41 @@ runs:
         helm repo add ${{ inputs.RepoName }} "${{ inputs.HelmRepo }}" || true
         helm repo update
 
-    - name: Installing NeuVector
+    - name: Install NeuVector with version mapping
       shell: bash
       run: |
         set -euo pipefail
+        
         VERSION="${{ inputs.Version }}"
 
-        SET_TAG=""
-        if [[ -n "${VERSION}" ]]; then
-          SET_TAG="--set tag=${VERSION}"
+        declare -A CHART_MAP=(
+          ["5.4.7"]="2.8.9"
+          ["5.4.6"]="2.8.8"
+          ["5.4.5"]="2.8.7"
+          ["5.4.4"]="2.8.6"
+          ["5.4.3"]="2.8.5"
+          ["5.4.2"]="2.8.4"
+          ["5.4.1"]="2.8.3"
+          ["5.4.0"]="2.8.2"
+        )
+
+        if [[ -z "$VERSION" ]]; then
+          echo "No version specified → Installing latest chart"
+          helm install neuvector neuvector/core \
+            --namespace neuvector --create-namespace
+          exit 0
         fi
-        
+
+        if [[ -z "${CHART_MAP[$VERSION]+x}" ]]; then
+          echo "❌ ERROR: Unknown APP version: $VERSION"
+          exit 1
+        fi
+
+        CHART_VERSION="${CHART_MAP[$VERSION]}"
+
+    - name: Installing NeuVector
+      shell: bash
+      run: |
         helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace ${SET_TAG} 
         
 branding:
