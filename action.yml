@@ -90,7 +90,7 @@ runs:
           SET_TAG="--set tag=${VERSION}"
         fi
         
-        helm install neuvector --namespace ${{ inputs.Namespace }} --create-namespace --set ${SET_TAG} neuvector/core 
+        helm install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace ${SET_TAG} 
         
 branding:
   icon: "shield"
