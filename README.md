@@ -50,7 +50,7 @@ jobs:
           kubeconfig: ${{ secrets.KUBECONFIG }}
 
       - name: Install NeuVector
-        uses: your-org/neuvector-action@v1
+        uses: amolkharche13/neuvector-action@v1.0.0-alpha
 ```
 ## Example: optional inputs
 
