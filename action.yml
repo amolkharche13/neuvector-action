@@ -109,11 +109,13 @@ runs:
         fi
 
         CHART_VERSION="${CHART_MAP[$VERSION]}"
+        echo "CHART_VERSION=$CHART_VERSION" >> "$GITHUB_ENV"
+
 
     - name: Installing NeuVector
       shell: bash
       run: |
-        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace --version ${{inputs.CHART_VERSION}}  --set tag=${{ inputs.Version}}
+        helm upgrade --install neuvector neuvector/core --namespace ${{ inputs.Namespace }} --create-namespace --version "${CHART_VERSION}"  --set tag=${{ inputs.Version}}
         
 branding:
   icon: "shield"
